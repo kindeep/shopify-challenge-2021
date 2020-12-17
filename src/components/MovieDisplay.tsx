@@ -91,8 +91,15 @@ export default function MovieDisplay({ movie }: { movie: Movie }) {
                 color="primary"
                 onClick={() => {
                   setNominations((prev) => {
+                    const newList = [{ ...movie }, ...prev];
+
                     if (prev.length < 5) {
-                      return [{ ...movie }, ...prev];
+                      localStorage.setItem(
+                        nominationsState.key,
+                        JSON.stringify(newList)
+                      );
+
+                      return newList;
                     } else {
                       enqueueSnackbar(
                         "You already have 5 nominations! delete one of them if you want to add a different one.",
@@ -117,6 +124,12 @@ export default function MovieDisplay({ movie }: { movie: Movie }) {
                         );
                         const newList = [...prev];
                         newList.splice(deleteIndex, 1);
+
+                        localStorage.setItem(
+                          nominationsState.key,
+                          JSON.stringify(newList)
+                        );
+
                         return newList;
                       });
                     }}

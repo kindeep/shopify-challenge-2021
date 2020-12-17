@@ -24,6 +24,6 @@ We'd like a simple to use interface that makes it easy to:
 ## Extras
 | Requirement   | Implemented ✅|
 | ------------- |:-------------:|
-| Save nomination lists if the user leaves the page| |
-| Animations for loading, adding/deleting movies, notifications | |
+| Save nomination lists if the user leaves the page| ✅ |
+| Animations for loading, adding/deleting movies, notifications | ✅ |
 | Create shareable links | |

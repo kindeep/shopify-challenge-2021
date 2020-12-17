@@ -5,11 +5,26 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
+import { useEffect } from "react";
+import { useRecoilState } from "recoil";
 import "./App.css";
+import nominationsState from "./atoms/nominationsState";
 import Movies from "./components/Movies";
 import Nominations from "./components/Nominations";
 
 function App() {
+  const [nominations, setNominations] = useRecoilState(nominationsState);
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(nominationsState.key);
+      if (stored) {
+        const storedObj = JSON.parse(stored);
+        if (storedObj) {
+          setNominations(storedObj);
+        }
+      }
+    } catch (e) {}
+  }, []);
   return (
     <div className="AppRoot">
       <AppBar position="static">
