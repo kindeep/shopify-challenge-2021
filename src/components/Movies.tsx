@@ -10,7 +10,7 @@ const { REACT_APP_OMDB_API_KEY: OMDB_API_KEY } = process.env;
 async function fetchMovies(searchKey: string) {
   console.log(OMDB_API_KEY);
   const response = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${encodeURIComponent(
+    `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${encodeURIComponent(
       searchKey
     )}&type=movie`
   );
