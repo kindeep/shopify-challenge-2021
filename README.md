@@ -23,7 +23,7 @@ We'd like a simple to use interface that makes it easy to:
 | Updates to the search terms should update the result list | ✅ |
 | Movies in search results can be added and removed from the nomination list. | ✅ |
 | If a search result has already been nominated, disable its nominate button. | ✅ |
-| Display a banner when the user has 5 nominations. | |
+| Display a banner when the user has 5 nominations. | ✅ |
 
 ## Extras
 | Requirement   | Implemented ✅|
