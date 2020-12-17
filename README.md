@@ -2,6 +2,10 @@
 
 Sumbission by Kindeep Singh Kargil
 
+The web app is made with React, I'm using Recoil for state management, framer-motion for some animations, and material-ui
+
+It's hosted here: https://shopify-challenge-2021.web.app/
+
 ## Description
 We need a webpage that can search OMDB for movies, and allow the user to save their favourite films they feel should be up for nomination. When they've selected 5 nominees they should be notified they're finished.
 
