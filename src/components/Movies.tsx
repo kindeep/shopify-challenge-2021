@@ -1,4 +1,5 @@
 import { makeStyles, TextField, Typography } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import moviesState from "../atoms/moviesState";
@@ -32,19 +33,27 @@ const useStyles = makeStyles((theme) => ({
   search: {
     marginBottom: theme.spacing(2),
   },
+  gutterBottom: {
+    marginBottom: theme.spacing(2),
+  },
 }));
 
 export default function Movies() {
   const [movies, setMovies] = useRecoilState(moviesState);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (searchTerm) {
       (async () => {
+        setLoading(true);
         const { success, data, message } = await fetchMovies(searchTerm);
         setMovies(data?.Search);
+        setLoading(false);
       })();
+    } else {
+      setMovies([]);
     }
   }, [setMovies, searchTerm]);
 
@@ -58,16 +67,28 @@ export default function Movies() {
           setSearchTerm(val);
         }}
         className={classes.search}
+        fullWidth
       ></TextField>
+      {loading && (
+        <Skeleton
+          height={200}
+          variant="rect"
+          className={classes.gutterBottom}
+        />
+      )}
       {movies?.map((movie) => (
         <MovieDisplay
           movie={movie}
           key={`movie_${movie.imdbID}`}
         ></MovieDisplay>
       ))}
+      {!loading && searchTerm && (!movies || movies.length === 0) && (
+        <Typography variant="body2">No results</Typography>
+      )}
       {!searchTerm && (
         <Typography variant="body2">
-          Try searching for movies using the text field above
+          Try searching for movies using the text field above, search results
+          will appear here!
         </Typography>
       )}
     </div>

@@ -3,10 +3,15 @@ import React from "react";
 import { useRecoilState } from "recoil";
 import nominationsState from "../atoms/nominationsState";
 import MovieDisplay from "./MovieDisplay";
+import MuiAlert from "@material-ui/lab/Alert";
+import { AnimatePresence, AnimateSharedLayout, motion } from "framer-motion";
 
 const useStyles = makeStyles((theme) => ({
   container: {
     paddingTop: theme.spacing(2),
+  },
+  gutterBottom: {
+    marginBottom: theme.spacing(2),
   },
 }));
 
@@ -18,21 +23,39 @@ export default function NOminations() {
       <Typography variant="h6" gutterBottom>
         Your Nominations
       </Typography>
-      {nominations?.map((movie) => (
-        <MovieDisplay
-          movie={movie}
-          variant="delete"
-          key={`movie_${movie.imdbID}`}
-        ></MovieDisplay>
-      ))}
-      {(!nominations || nominations.length === 0) && (
-        <>
-          <Typography variant="body2">
-            Your nominations are empty, try searching for movies and add them to
-            this list.
-          </Typography>
-        </>
-      )}
+      <motion.div layout>
+        {nominations && nominations.length === 5 && (
+          <MuiAlert className={classes.gutterBottom} variant="filled">
+            You've selected all 5 Nominations!
+          </MuiAlert>
+        )}
+      </motion.div>
+      <AnimateSharedLayout>
+        <motion.div>
+          {nominations?.map((movie) => (
+            <div key={`nomination_${movie.imdbID}`}>
+              <motion.div layout>
+                <AnimatePresence>
+                  <MovieDisplay movie={movie}></MovieDisplay>
+                </AnimatePresence>
+              </motion.div>
+            </div>
+          ))}
+        </motion.div>
+      </AnimateSharedLayout>
+
+      <motion.div layout>
+        {(!nominations || nominations.length === 0) && (
+          <MuiAlert
+            className={classes.gutterBottom}
+            variant="filled"
+            severity="warning"
+          >
+            You don't have any nominations! Search for movies and add
+            nominations to this list.
+          </MuiAlert>
+        )}
+      </motion.div>
     </div>
   );
 }

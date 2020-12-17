@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   CardActions,
   CardContent,
@@ -6,6 +7,7 @@ import {
   CardMedia,
   IconButton,
   makeStyles,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import React from "react";
@@ -18,9 +20,8 @@ import { useSnackbar } from "notistack";
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
     display: "flex",
-    // justifyContent: "space-between",
   },
   posterBg: {
     position: "absolute",
@@ -63,16 +64,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MovieDisplay({
-  movie,
-  variant = "add",
-}: {
-  movie: Movie;
-  variant?: "add" | "delete";
-}) {
+export default function MovieDisplay({ movie }: { movie: Movie }) {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [nominations, setNominations] = useRecoilState(nominationsState);
+  const nominated =
+    nominations.findIndex((m) => m.imdbID === movie.imdbID) !== -1;
   return (
     <>
       <Card variant="outlined" className={classes.card}>
@@ -88,8 +85,10 @@ export default function MovieDisplay({
         <div className={classes.content}>
           <CardHeader title={movie.Title} subheader={movie.Year}></CardHeader>
           <CardActions>
-            {variant === "add" && (
-              <IconButton
+            {!nominated && (
+              <Button
+                variant="text"
+                color="primary"
                 onClick={() => {
                   setNominations((prev) => {
                     if (prev.length < 5) {
@@ -104,24 +103,28 @@ export default function MovieDisplay({
                   });
                 }}
               >
-                <AddIcon />
-              </IconButton>
+                Nominate movie
+              </Button>
             )}
-            {variant === "delete" && (
-              <IconButton
-                onClick={() => {
-                  setNominations((prev) => {
-                    const deleteIndex = prev.findIndex(
-                      (m) => m.imdbID === movie.imdbID
-                    );
-                    const newList = [...prev];
-                    newList.splice(deleteIndex, 1);
-                    return newList;
-                  });
-                }}
-              >
-                <DeleteIcon />
-              </IconButton>
+            {nominated && (
+              <>
+                <Tooltip title="Remove nomination">
+                  <IconButton
+                    onClick={() => {
+                      setNominations((prev) => {
+                        const deleteIndex = prev.findIndex(
+                          (m) => m.imdbID === movie.imdbID
+                        );
+                        const newList = [...prev];
+                        newList.splice(deleteIndex, 1);
+                        return newList;
+                      });
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
             )}
           </CardActions>
         </div>
